@@ -6,10 +6,7 @@ def randlist(n, *sets):
     arr = [None] * n
     bucket = set(range(n))
     for i in range(n):
-        subset = set(bucket-{i})
-        for group in sets:
-            if i in group:
-                subset -= group
+        subset = set(bucket-sets[i])
         if not subset:
             return randlist(n, *sets)
         choice = random.choice(list(subset))
@@ -24,21 +21,16 @@ def draw_names(*names):
     for name in names:
         if isinstance(name, str):
             actual_names.append(name)
+            sets.append({i})
             i += 1
         else:
-            sets.append({i, i+len(name)})
+            sets += [{i, i+len(name)-1}] * len(name)
             actual_names += list(name)
             i += len(name)
     result = randlist(len(actual_names), *sets)
     for index, got_index in enumerate(result):
-        if index == got_index:
-            raise Exception(index)
         print(f'{actual_names[index]} got {actual_names[got_index]}')
 
 if __name__ == "__main__":
     from names import names
-    if names:
-        draw_names(*names)
-    else:
-        draw_names("Daniel", "Ben", ["Joey", "Erin"], ["Stephanie", "Jason"])
-
+    draw_names(*names)
