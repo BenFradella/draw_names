@@ -18,6 +18,7 @@ def draw_names(*names):
     actual_names = []
     sets = []
     i = 0
+
     for name in names:
         if isinstance(name, str):
             actual_names.append(name)
@@ -27,10 +28,12 @@ def draw_names(*names):
             sets += [{i, i+len(name)-1}] * len(name)
             actual_names += list(name)
             i += len(name)
-    result = randlist(len(actual_names), *sets)
-    for index, got_index in enumerate(result):
-        print(f'{actual_names[index]} got {actual_names[got_index]}')
+
+    return ((actual_names[index], actual_names[got_index]) for index, got_index in enumerate(randlist(len(actual_names), *sets)))
+
 
 if __name__ == "__main__":
     from names import names
-    draw_names(*names)
+
+    for it in draw_names(*names):
+        print(f'{it[0]} got {it[1]}')
